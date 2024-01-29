@@ -49,7 +49,7 @@ jobs:
       with:
         otp-version: ${{matrix.otp}}
         elixir-version: ${{matrix.elixir}}
-        version-type: 'strict'
+        version-type: strict
     # Step: Check out the code.
     - name: Checkout code
       uses: actions/checkout@v3
