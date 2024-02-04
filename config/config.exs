@@ -7,12 +7,12 @@
 # General application configuration
 import Config
 
-config :TODO,
+config :todo,
   ecto_repos: [TODO.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :TODO, TODOWeb.Endpoint,
+config :todo, TODOWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Phoenix.Endpoint.Cowboy2Adapter,
   render_errors: [
@@ -32,7 +32,7 @@ config :TODO, TODOWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :TODO, TODO.Mailer, adapter: Swoosh.Adapters.Local
+config :todo, TODO.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,

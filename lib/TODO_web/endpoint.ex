@@ -1,5 +1,5 @@
 defmodule TODOWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :TODO
+  use Phoenix.Endpoint, otp_app: :todo
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -19,7 +19,7 @@ defmodule TODOWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :TODO,
+    from: :todo,
     gzip: false,
     only: TODOWeb.static_paths()
 
@@ -29,7 +29,7 @@ defmodule TODOWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :TODO
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :todo
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,

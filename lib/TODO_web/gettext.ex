@@ -20,5 +20,5 @@ defmodule TODOWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :TODO
+  use Gettext, otp_app: :todo
 end

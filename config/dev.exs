@@ -1,7 +1,7 @@
 import Config
 
 # Configure your database
-config :TODO, TODO.Repo,
+config :todo, TODO.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
@@ -16,7 +16,7 @@ config :TODO, TODO.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
-config :TODO, TODOWeb.Endpoint,
+config :todo, TODOWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
@@ -53,7 +53,7 @@ config :TODO, TODOWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :TODO, TODOWeb.Endpoint,
+config :todo, TODOWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
@@ -63,7 +63,7 @@ config :TODO, TODOWeb.Endpoint,
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :TODO, dev_routes: true
+config :todo, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

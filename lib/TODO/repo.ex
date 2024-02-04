@@ -1,5 +1,5 @@
 defmodule TODO.Repo do
   use Ecto.Repo,
-    otp_app: :TODO,
+    otp_app: :todo,
     adapter: Ecto.Adapters.Postgres
 end
