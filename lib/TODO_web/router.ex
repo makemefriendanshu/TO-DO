@@ -78,7 +78,7 @@ defmodule TODOWeb.Router do
   end
 
   scope "/", TODOWeb do
-    pipe_through [:browser, :require_authenticated_user]
+    pipe_through [:browser]
 
     get "/", PageController, :home
     live "/users", UserLive.Index, :index
