@@ -1,9 +1,9 @@
-defmodule GigalixirGettingStarted.MixProject do
+defmodule TODO.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :gigalixir_getting_started,
+      app: :todo,
       version: "0.1.0",
       elixir: "~> 1.12.2",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule GigalixirGettingStarted.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {GigalixirGettingStarted.Application, []},
+      mod: {TODO.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -32,6 +32,7 @@ defmodule GigalixirGettingStarted.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.10"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.10"},

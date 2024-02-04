@@ -1,4 +1,4 @@
-defmodule GigalixirGettingStarted.Repo.Migrations.CreateUsers do
+defmodule TODO.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
   def change do

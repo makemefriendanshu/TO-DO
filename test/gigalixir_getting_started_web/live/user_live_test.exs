@@ -1,8 +1,8 @@
-defmodule GigalixirGettingStartedWeb.UserLiveTest do
-  use GigalixirGettingStartedWeb.ConnCase
+defmodule TODOWeb.UserLiveTest do
+  use TODOWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import GigalixirGettingStarted.AccountsFixtures
+  import TODO.AccountsFixtures
 
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
