@@ -6,7 +6,7 @@ defmodule TODO.Repo.Migrations.CreateUsersAuthTables do
 
     alter table(:users) do
       add :email, :citext, null: true
-      add :hashed_password, :string, null: false
+      add :hashed_password, :string, null: true
       add :confirmed_at, :naive_datetime
     end
 
