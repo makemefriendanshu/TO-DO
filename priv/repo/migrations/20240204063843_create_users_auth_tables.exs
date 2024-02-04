@@ -5,7 +5,7 @@ defmodule TODO.Repo.Migrations.CreateUsersAuthTables do
     execute "CREATE EXTENSION IF NOT EXISTS citext", ""
 
     alter table(:users) do
-      add :email, :citext, null: false
+      add :email, :citext, null: true
       add :hashed_password, :string, null: false
       add :confirmed_at, :naive_datetime
     end
