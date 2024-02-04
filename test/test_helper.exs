@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(GigalixirGettingStarted.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(TODO.Repo, :manual)
