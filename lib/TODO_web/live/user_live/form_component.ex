@@ -30,9 +30,7 @@ defmodule TODOWeb.UserLive.FormComponent do
 
   @impl true
   def update(%{user: user} = assigns, socket) do
-    socket.assigns |> IO.inspect(label: "changeset")
     changeset = Accounts.change_user(user)
-    # changeset = user |> Accounts.update_user()
 
     {:ok,
      socket
@@ -51,7 +49,6 @@ defmodule TODOWeb.UserLive.FormComponent do
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
-    user_params |> IO.inspect(label: "user_param")
     save_user(socket, socket.assigns.action, user_params)
   end
 
