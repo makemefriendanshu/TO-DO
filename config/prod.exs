@@ -9,10 +9,11 @@ config :todo, TODOWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Configures Swoosh API Client
-config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: TODO.Finch
+config :swoosh, :api_client, false
+# config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: TODO.Finch
 
 # Disable Swoosh Local Memory Storage
-config :swoosh, local: false
+config :swoosh, local: true
 
 # Do not print debug messages in production
 config :logger, level: :info
