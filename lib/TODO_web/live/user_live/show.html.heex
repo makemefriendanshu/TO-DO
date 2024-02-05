@@ -9,7 +9,11 @@
 </.header>
 
 <.list>
+  <%= IO.inspect(@user)%>
   <:item title="Email"><%= @user.email %></:item>
+  <:item title="Confirmed at"><%= @user.confirmed_at %></:item>
+  <:item title="Inserted at"><%= @user.inserted_at %></:item>
+  <:item title="Inserted at"><%= @user.updated_at %></:item>
 </.list>
 
 <.back navigate={~p"/users"}>Back to users</.back>

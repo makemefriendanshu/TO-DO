@@ -7,6 +7,8 @@ defmodule TODO.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    # field :inserted_at, :utc_datetime
+    # field :updated_at, :utc_datetime
 
     timestamps(type: :utc_datetime)
   end
@@ -85,6 +87,12 @@ defmodule TODO.Accounts.User do
     else
       changeset
     end
+  end
+
+  def changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:email, :password])
+    |> validate_password(opts)
   end
 
   @doc """

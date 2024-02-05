@@ -20,6 +20,8 @@ defmodule TODOWeb.UserLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:email]} type="text" label="Email" />
+        <.input field={@form[:password]} type="text" label="Password" />
+
         <:actions>
           <.button phx-disable-with="Saving...">Save User</.button>
         </:actions>
