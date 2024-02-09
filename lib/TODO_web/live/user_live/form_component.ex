@@ -8,7 +8,7 @@ defmodule TODOWeb.UserLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
+        <%= @user.name %>
         <:subtitle>Use this form to manage user records in your database.</:subtitle>
       </.header>
 
@@ -19,9 +19,10 @@ defmodule TODOWeb.UserLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:email]} type="text" label="Email" />
-        <.input field={@form[:password]} type="text" label="Password" />
-
+        <.input field={@form[:name]} type="text" label="Name" />
+        <.input field={@form[:email]} type="email" label="Email" />
+        <.input field={@form[:password]} type="password" label="Password" />
+        <.input field={@form[:is_admin]} type="checkbox" label="Is admin" />
         <:actions>
           <.button phx-disable-with="Saving...">Save User</.button>
         </:actions>

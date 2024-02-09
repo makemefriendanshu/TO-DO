@@ -68,6 +68,7 @@ defmodule TODOWeb.Router do
   scope "/", TODOWeb do
     pipe_through [:browser]
 
+    get "/", PageController, :home
     delete "/users/log_out", UserSessionController, :delete
 
     live_session :current_user,
@@ -78,9 +79,8 @@ defmodule TODOWeb.Router do
   end
 
   scope "/", TODOWeb do
-    pipe_through [:browser]
+    pipe_through [:browser, :require_admin_user]
 
-    get "/", PageController, :home
     live "/users", UserLive.Index, :index
     live "/users/new", UserLive.Index, :new
     live "/users/:id/edit", UserLive.Index, :edit

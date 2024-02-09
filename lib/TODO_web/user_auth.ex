@@ -211,6 +211,18 @@ defmodule TODOWeb.UserAuth do
     end
   end
 
+  def require_admin_user(conn, _opts) do
+    if conn.assigns[:current_user] != nil and conn.assigns[:current_user] |> Map.from_struct |> get_in([:is_admin]) do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You must be admin to access this page.")
+      |> maybe_store_return_to()
+      |> redirect(to: ~p"/users/log_in")
+      |> halt()
+    end
+  end
+
   defp put_token_in_session(conn, token) do
     conn
     |> put_session(:user_token, token)

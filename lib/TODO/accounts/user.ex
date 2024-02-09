@@ -3,10 +3,12 @@ defmodule TODO.Accounts.User do
   import Ecto.Changeset
 
   schema "users" do
+    field :name, :string
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    field :is_admin, :boolean
     # field :inserted_at, :utc_datetime
     # field :updated_at, :utc_datetime
 
@@ -36,9 +38,10 @@ defmodule TODO.Accounts.User do
       submitting the form), this option can be set to `false`.
       Defaults to `true`.
   """
+
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :is_admin])
     |> validate_email(opts)
     |> validate_password(opts)
   end
@@ -89,9 +92,14 @@ defmodule TODO.Accounts.User do
     end
   end
 
+  def changeset(user, %{"password" => ""} = attrs) do
+    user
+    |> cast(attrs, [:name, :email, :is_admin])
+  end
+
   def changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:name, :email, :password, :is_admin])
     |> validate_password(opts)
   end
 
