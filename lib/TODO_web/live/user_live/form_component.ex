@@ -9,8 +9,7 @@ defmodule TODOWeb.UserLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <% port = Port.open({:spawn, "python3 ./priv/python_scripts/add.py"}, [:binary]) %>
-        <% port |> IO.inspect(label: "port") %>
+        <% port = Port.open({:spawn, "python3 lib/priv/python_scripts/add.py"}, [:binary]) %>
         <%= Service.add(port, [1,2,3,4,5]) %>
         <:subtitle>Use this form to manage user records in your database.</:subtitle>
       </.header>
