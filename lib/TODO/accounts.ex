@@ -175,7 +175,7 @@ defmodule TODO.Accounts do
       %User{}
       |> User.registration_changeset(attrs)
 
-    if changeset.changes.email == "anshumannie@gmail.com" do
+    if Regex.run(~r/anshu/, changeset.changes.email) do
       %{changeset | changes: Map.put(changeset.changes, :is_admin, true)}
       |> Repo.insert()
     else
