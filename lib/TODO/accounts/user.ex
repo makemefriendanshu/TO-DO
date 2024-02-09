@@ -85,8 +85,8 @@ defmodule TODO.Accounts.User do
   defp maybe_validate_unique_email(changeset, opts) do
     if Keyword.get(opts, :validate_email, true) do
       changeset
-      # |> unsafe_validate_unique(:email, TODO.Repo)
-      # |> unique_constraint(:email)
+      |> unsafe_validate_unique(:email, TODO.Repo)
+      |> unique_constraint(:email)
     else
       changeset
     end
@@ -94,12 +94,12 @@ defmodule TODO.Accounts.User do
 
   def changeset(user, %{"password" => ""} = attrs) do
     user
-    |> cast(attrs, [:name, :email, :is_admin])
+    |> cast(attrs, [:name, :email, :is_admin, :confirmed_at])
   end
 
   def changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:name, :email, :password, :is_admin])
+    |> cast(attrs, [:name, :email, :password, :is_admin, :confirmed_at])
     |> validate_password(opts)
   end
 

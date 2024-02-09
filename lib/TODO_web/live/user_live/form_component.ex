@@ -2,13 +2,16 @@ defmodule TODOWeb.UserLive.FormComponent do
   use TODOWeb, :live_component
 
   alias TODO.Accounts
+  alias TODOWeb.Service
 
   @impl true
   def render(assigns) do
     ~H"""
     <div>
       <.header>
-        <%= @user.name %>
+        <% port = Port.open({:spawn, "python3 ./priv/python_scripts/add.py"}, [:binary]) %>
+        <% port |> IO.inspect(label: "port") %>
+        <%= Service.add(port, [1,2,3,4,5]) %>
         <:subtitle>Use this form to manage user records in your database.</:subtitle>
       </.header>
 
@@ -23,6 +26,7 @@ defmodule TODOWeb.UserLive.FormComponent do
         <.input field={@form[:email]} type="email" label="Email" />
         <.input field={@form[:password]} type="password" label="Password" />
         <.input field={@form[:is_admin]} type="checkbox" label="Is admin" />
+        <.input field={@form[:confirmed_at]} type="datetime-local" label="Confirmed at" />
         <:actions>
           <.button phx-disable-with="Saving...">Save User</.button>
         </:actions>
