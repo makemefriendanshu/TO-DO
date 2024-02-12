@@ -3,6 +3,7 @@ defmodule TODOWeb.UserSessionController do
 
   alias TODO.Accounts
   alias TODOWeb.UserAuth
+  alias TODO.AccountsFixture
 
   def create(conn, %{"_action" => "registered"} = params) do
     create(conn, params, "Account created successfully!")
@@ -48,5 +49,34 @@ defmodule TODOWeb.UserSessionController do
     conn
     |> put_flash(:info, "Logged out successfully.")
     |> UserAuth.log_out_user()
+  end
+
+  def resend_confirmation(conn, %{"user" => user_params}, info) do
+    %{"email" => email, "password" => password} = user_params
+    user = Accounts.get_user_by_email_and_password(email, password)
+    token =
+      AccountsFixture.extract_user_token(fn url ->
+        Accounts.deliver_user_confirmation_instructions(user, url)
+      end)
+
+    cond do
+      is_nil(user) ->
+        conn
+        |> put_flash(:error, "Invalid email or password")
+        |> put_flash(:email, String.slice(email, 0, 160))
+        |> redirect(to: ~p"/users/log_in")
+
+      is_nil(user.confirmed_at) ->
+        conn
+        |> put_flash(:error, "User not confirmed")
+        |> put_flash(:email, String.slice(email, 0, 160))
+        |> redirect(to: ~p"/users/confirm/#{token}")
+
+      true ->
+        conn
+        |> put_flash(:info, info)
+        |> UserAuth.log_in_user(user, user_params)
+
+    end
   end
 end
