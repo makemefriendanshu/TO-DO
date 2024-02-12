@@ -17,8 +17,7 @@ defmodule TODO.Application do
       # Start a worker by calling: TODO.Worker.start_link(arg)
       # {TODO.Worker, arg},
       # Start to serve requests, typically the last entry
-      TODOWeb.Endpoint,
-      {TODO.Worker, [name: TODO.Worker]},
+      TODOWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -39,9 +39,3 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
-// Local files can be imported directly using relative paths, for example
-let socket = new Socket("/socket", {params: {token: csrfToken}})
-socket.connect()
-import {hasCameraElement, setupWebcamAndDetection} from "./webcam"
-
-if(hasCameraElement()) setupWebcamAndDetection(socket);

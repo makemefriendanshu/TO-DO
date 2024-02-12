@@ -21,7 +21,7 @@ defmodule TODOWeb do
 
   def router do
     quote do
-      use Phoenix.Router
+      use Phoenix.Router, helpers: false
 
       # Import common connection and controller functions to use in pipelines
       import Plug.Conn
@@ -46,37 +46,6 @@ defmodule TODOWeb do
       import TODOWeb.Gettext
 
       unquote(verified_routes())
-      alias TODOWeb.Router.Helpers, as: Routes
-    end
-  end
-
-  def controller_without_live do
-    quote do
-      use Phoenix.Controller, namespace: TODOWeb
-
-      import Plug.Conn
-      import TODOWeb.Gettext
-
-      # unquote(verified_routes())
-      alias TODOWeb.Router.Helpers, as: Routes
-    end
-  end
-
-  def view do
-    quote do
-      use Phoenix.View,
-        root: "lib/TODO_web/templates",
-        namespace: TODOWeb
-
-      # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
-
-      # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
-
-      import TODOWeb.ErrorHelpers
-      import TODOWeb.Gettext
-      alias TODOWeb.Router.Helpers, as: Routes
     end
   end
 
