@@ -18,8 +18,8 @@ from distutils.errors import CompileError
 
 # Python supported version checks. Keep right after stdlib imports to ensure we
 # get a sensible error for older Python versions
-if sys.version_info[:2] < (3, 9):
-    raise RuntimeError("Python version >= 3.9 required.")
+# if sys.version_info[:2] < (3, 9):
+#     raise RuntimeError("Python version >= 3.9 required.")
 
 
 # This is a bit hackish: we are setting a global variable so that the main
