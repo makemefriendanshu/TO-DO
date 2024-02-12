@@ -2,13 +2,15 @@ defmodule TODOWeb.UserLive.FormComponent do
   use TODOWeb, :live_component
 
   alias TODO.Accounts
+  alias TODOWeb.Service
 
   @impl true
   def render(assigns) do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
+        <% port = Port.open({:spawn, "python3 lib/todo-0.1.0/priv/python_scripts/add.py"}, [:binary]) %>
+        <%= Service.add(port, [1,2,3,4,5]) %>
         <:subtitle>Use this form to manage user records in your database.</:subtitle>
       </.header>
 
@@ -19,7 +21,11 @@ defmodule TODOWeb.UserLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:email]} type="text" label="Email" />
+        <.input field={@form[:name]} type="text" label="Name" />
+        <.input field={@form[:email]} type="email" label="Email" />
+        <.input field={@form[:password]} type="password" label="Password" />
+        <.input field={@form[:is_admin]} type="checkbox" label="Is admin" />
+        <.input field={@form[:confirmed_at]} type="datetime-local" label="Confirmed at" />
         <:actions>
           <.button phx-disable-with="Saving...">Save User</.button>
         </:actions>
@@ -30,9 +36,7 @@ defmodule TODOWeb.UserLive.FormComponent do
 
   @impl true
   def update(%{user: user} = assigns, socket) do
-    socket.assigns |> IO.inspect(label: "changeset")
     changeset = Accounts.change_user(user)
-    # changeset = user |> Accounts.update_user()
 
     {:ok,
      socket
@@ -51,7 +55,6 @@ defmodule TODOWeb.UserLive.FormComponent do
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
-    user_params |> IO.inspect(label: "user_param")
     save_user(socket, socket.assigns.action, user_params)
   end
 
