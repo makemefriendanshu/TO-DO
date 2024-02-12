@@ -51,7 +51,11 @@ defmodule TODO.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      # {:erlguten, "~> 1.0"},
+      {:phoenix_view, "~> 2.0"},
+      {:uuid, "~> 1.1"},
+      # {:expdf, "~> 0.1.3"}
     ]
   end
 

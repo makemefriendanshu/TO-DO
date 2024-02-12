@@ -21,6 +21,9 @@ defmodule TODOWeb.UserLoginLive do
 
         <:actions>
           <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
+          <.link href={~p"/users/confirm"} class="text-sm font-semibold">
+            Resend Conformation?
+          </.link>
           <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
             Forgot your password?
           </.link>
