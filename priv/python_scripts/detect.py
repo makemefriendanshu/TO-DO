@@ -1,6 +1,6 @@
 import os
 from struct import unpack, pack
-import numpy as np
+import numpy
 import cv2, sys
 import json
 from struct import unpack, pack
@@ -31,7 +31,7 @@ def read_message(input_f):
     image_data = input_f.read(total_msg_size - UUID4_SIZE)
 
     # converting the binary to a opencv image
-    nparr = np.frombuffer(image_data, np.uint8)
+    nparr = numpy.frombuffer(image_data, numpy.uint8)
     image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     return {'id': image_id, 'image': image}
