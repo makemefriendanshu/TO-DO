@@ -19,6 +19,7 @@
     </div>
     <.link patch={~p"/users/#{user}/edit"}>Edit</.link>
   </:action>
+  <br>
   <:action :let={{id, user}}>
     <.link
       phx-click={JS.push("delete", value: %{id: user.id}) |> hide("##{id}")}

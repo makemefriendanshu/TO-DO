@@ -88,4 +88,13 @@ defmodule TODOWeb.Router do
     live "/users/:id", UserLive.Show, :show
     live "/users/:id/show/edit", UserLive.Show, :edit
   end
+
+  scope "/camera", TODOWeb do
+    pipe_through :browser
+
+    get "/", CamController, :index
+
+    resources "/uploads", UploadController, only: [:new, :create]
+    get "/webcam", WebcamController, :index
+  end
 end
