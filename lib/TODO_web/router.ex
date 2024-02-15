@@ -76,6 +76,8 @@ defmodule TODOWeb.Router do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
+
+    live "/uploads", UploaderLive, :index
   end
 
   scope "/", TODOWeb do
