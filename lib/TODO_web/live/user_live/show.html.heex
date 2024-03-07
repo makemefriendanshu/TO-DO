@@ -1,3 +1,4 @@
+<div class="mx-auto max-w-2xl">
 <.header>
   Email:  <%= @user.email %>
   <:subtitle>This is a user record from your database.</:subtitle>
@@ -14,7 +15,14 @@
   <:item title="Is Admin"><%= @user.is_admin %></:item>
   <:item title="Confirmed at"><%= @user.confirmed_at %></:item>
   <:item title="Inserted at"><%= @user.inserted_at %></:item>
-  <:item title="Inserted at"><%= @user.updated_at %></:item>
+  <:item title="Updated at"><%= @user.updated_at %></:item>
+  <:item title="Avatar">
+  <% base64_content = @user.avatar.content |> Base.encode64 %>
+        <a href={"data:image/jpeg;base64,#{base64_content}"} download={@user.avatar.filename} innerHTML="download">
+          <img src={"data:image/jpeg;base64,#{base64_content}"}>
+        </a>
+  <%= inspect @user.avatar %>
+  </:item>
 </.list>
 
 <.back navigate={~p"/users"}>Back to users</.back>
@@ -29,3 +37,4 @@
     patch={~p"/users/#{@user}"}
   />
 </.modal>
+</div>

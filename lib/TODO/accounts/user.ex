@@ -1,4 +1,5 @@
 defmodule TODO.Accounts.User do
+  alias TODO.Documents.Upload
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -9,6 +10,8 @@ defmodule TODO.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
     field :is_admin, :boolean
+    has_many :uploads, Upload
+    has_one :avatar, Upload, on_replace: :update
     # field :inserted_at, :utc_datetime
     # field :updated_at, :utc_datetime
 

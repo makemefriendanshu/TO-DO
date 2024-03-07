@@ -18,13 +18,22 @@ defmodule TODOWeb.UserLive.Index do
     socket
     |> assign(:page_title, "Edit User")
     |> assign(:user, Accounts.get_user!(id))
+    |> allow_upload(:avatar,
+      accept: ~w(.jpg .jpeg),
+      max_entries: 1
+    )
   end
 
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New User")
     |> assign(:user, %User{})
+    |> allow_upload(:avatar,
+      accept: ~w(.jpg .jpeg),
+      max_entries: 1
+    )
   end
+
 
   defp apply_action(socket, :index, _params) do
     socket

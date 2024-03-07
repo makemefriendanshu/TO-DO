@@ -1,0 +1,9 @@
+File.open("/home/anshuman/Documents/GitHub/TO-DO/assets/css/extra.css", [:append], fn file ->
+      IO.binwrite(file, ".max-w-screen-sm { max-width: 640px; }")
+    end)
+    .max-w-screen-sm { max-width: 640px; }
+    File.write("/home/anshuman/Documents/GitHub/TO-DO/assets/css/extra.css", "new content!", [:append])new content!
+ new content!
+ new content!
+ new content!
+ new content!

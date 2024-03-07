@@ -1,6 +1,7 @@
 defmodule TODOWeb.UserLive.FormComponent do
   use TODOWeb, :live_component
 
+  alias TODO.Repo
   alias TODO.Accounts
   alias TODOWeb.Service
 
@@ -9,8 +10,6 @@ defmodule TODOWeb.UserLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <% port = Port.open({:spawn, "python3 lib/todo-0.1.0/priv/python_scripts/add.py"}, [:binary]) %>
-        <%= Service.add(port, [1,2,3,4,5]) %>
         <:subtitle>Use this form to manage user records in your database.</:subtitle>
       </.header>
 
@@ -26,6 +25,9 @@ defmodule TODOWeb.UserLive.FormComponent do
         <.input field={@form[:password]} type="password" label="Password" />
         <.input field={@form[:is_admin]} type="checkbox" label="Is admin" />
         <.input field={@form[:confirmed_at]} type="datetime-local" label="Confirmed at" />
+        <div>
+          <Phoenix.Component.live_file_input upload={@uploads.avatar} class="text-black bg-blue-400 dark:bg-blue-500 sfont-medium rounded-lg text-sm px-5 py-2.5 text-center"/>
+        </div>
         <:actions>
           <.button phx-disable-with="Saving...">Save User</.button>
         </:actions>
@@ -41,7 +43,11 @@ defmodule TODOWeb.UserLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_form(changeset)}
+     |> assign_form(changeset)
+     |> allow_upload(:avatar,
+       accept: ~w(.jpg .jpeg),
+       max_entries: 1
+     )}
   end
 
   @impl true
@@ -59,7 +65,43 @@ defmodule TODOWeb.UserLive.FormComponent do
   end
 
   defp save_user(socket, :edit, user_params) do
-    case Accounts.update_user(socket.assigns.user, user_params) do
+    param =
+      if Service.has_no_uploads(socket) do
+        []
+      else
+        client_name = Service.get_file_info(socket, :client_name)
+        client_size = Service.get_file_info(socket, :client_size)
+        client_type = Service.get_file_info(socket, :client_type)
+
+        consume_uploaded_entries(socket, :avatar, fn %{path: path}, _entry ->
+          content = File.read!(path)
+
+          {:ok,
+          %{
+             filename: client_name,
+             content_type: client_type,
+              size: client_size,
+              content: content,
+              user_id:
+                  socket.assigns.current_user
+                  |> Map.from_struct()
+                  |> Map.get(:id)
+          }}
+        end)
+      end
+
+    user =
+      socket.assigns.user
+      |> Repo.preload(:avatar)
+
+    user_changeset =
+      user |> Accounts.change_user(user_params)
+
+
+    user_with_avatar =
+      Ecto.Changeset.put_assoc(user_changeset, :avatar, hd(param))
+
+    case Repo.update(user_with_avatar) do
       {:ok, user} ->
         notify_parent({:saved, user})
 

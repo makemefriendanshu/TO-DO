@@ -462,6 +462,7 @@ defmodule TODOWeb.CoreComponents do
 
   slot :col, required: true do
     attr :label, :string
+    attr :class, :string, required: false
   end
 
   slot :action, doc: "the slot for showing user actions in the last table column"
@@ -494,7 +495,7 @@ defmodule TODOWeb.CoreComponents do
               phx-click={@row_click && @row_click.(row)}
               class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
-              <div class="block py-4 pr-6">
+              <div class={["block py-4 pr-6 ", col[:class]]}>
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
                   <%= render_slot(col, @row_item.(row)) %>
@@ -596,6 +597,130 @@ defmodule TODOWeb.CoreComponents do
     <span class={[@name, @class]} />
     """
   end
+
+  # @doc ~S"""
+  # Generates an image preview on the client for a selected file.
+
+  # [INSERT LVATTRDOCS]
+
+  # ## Examples
+
+  # ```heex
+  # <%= for entry <- @uploads.avatar.entries do %>
+  #   <.live_img_preview entry={entry} width="75" />
+  # <% end %>
+  # ```
+
+  # When you need to use it multiple times, make sure that they have distinct ids
+
+  # ```heex
+  # <%= for entry <- @uploads.avatar.entries do %>
+  #   <.live_img_preview entry={entry} width="75" />
+  # <% end %>
+
+  # <%= for entry <- @uploads.avatar.entries do %>
+  #   <.live_img_preview id={"modal-#{entry.ref}"} entry={entry} width="500" />
+  # <% end %>
+  # ```
+  # """
+  # @doc type: :component
+
+  attr :entry, Phoenix.LiveView.UploadEntry,
+    required: true,
+    doc: "The `Phoenix.LiveView.UploadEntry` struct"
+
+
+  attr :id, :string,
+    default: nil,
+    doc:
+      "the id of the img tag. Derived by default from the entry ref, but can be overridden as needed if you need to render a preview of the same entry multiple times on the same page"
+
+  attr :rest, :global, []
+
+  def live_img_preview(assigns) do
+    ~H"""
+    <img
+      id={@id || "phx-preview-#{@entry.ref}"}
+      data-phx-upload-ref={@entry.upload_ref}
+      data-phx-entry-ref={@entry.ref}
+      data-phx-hook="Phoenix.LiveImgPreview"
+      data-phx-update="ignore"
+      {@rest} />
+    """
+  end
+
+    @doc """
+  Builds a file input tag for a LiveView upload.
+
+  [INSERT LVATTRDOCS]
+
+  ## Drag and Drop
+
+  Drag and drop is supported by annotating the droppable container with a `phx-drop-target`
+  attribute pointing to the UploadConfig `ref`, so the following markup is all that is required
+  for drag and drop support:
+
+  ```heex
+  <div class="container" phx-drop-target={@uploads.avatar.ref}>
+    <!-- ... -->
+    <.live_file_input upload={@uploads.avatar} />
+  </div>
+  ```
+
+  ## Examples
+
+  Rendering a file input:
+
+  ```heex
+  <.live_file_input upload={@uploads.avatar} />
+  ```
+
+  Rendering a file input with a label:
+
+  ```heex
+  <label for={@uploads.avatar.ref}>Avatar</label>
+  <.live_file_input upload={@uploads.avatar} />
+  ```
+  """
+  @doc type: :component
+
+  attr(:upload, Phoenix.LiveView.UploadConfig,
+    required: true,
+    doc: "The `Phoenix.LiveView.UploadConfig` struct"
+  )
+
+  attr(:accept, :string,
+    doc:
+      "the optional override for the accept attribute. Defaults to :accept specified by allow_upload"
+  )
+
+  attr(:rest, :global, include: ~w(webkitdirectory required disabled))
+  attr :class, :string, default: nil
+
+  def live_file_input(%{upload: upload} = assigns) do
+    assigns = assign_new(assigns, :accept, fn -> upload.accept != :any && upload.accept end)
+
+    ~H"""
+    <input
+      id={@upload.ref}
+      type="file"
+      class={@class}
+      name={@upload.name}
+      accept={@accept}
+      data-phx-hook="Phoenix.LiveFileUpload"
+      data-phx-update="ignore"
+      data-phx-upload-ref={@upload.ref}
+      data-phx-active-refs={join_refs(for(entry <- @upload.entries, do: entry.ref))}
+      data-phx-done-refs={join_refs(for(entry <- @upload.entries, entry.done?, do: entry.ref))}
+      data-phx-preflighted-refs={join_refs(for(entry <- @upload.entries, entry.preflighted?, do: entry.ref))}
+      data-phx-auto-upload={@upload.auto_upload?}
+      {if @upload.max_entries > 1, do: Map.put(@rest, :multiple, true), else: @rest}
+    />
+    """
+  end
+
+  defp join_refs(entries), do: Enum.join(entries, ",")
+
 
   ## JS Commands
 

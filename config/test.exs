@@ -23,6 +23,7 @@ config :todo, TODOWeb.Endpoint,
   secret_key_base: "odR/2inAgLAHQoYSF69WtZzP3gLMWQikEa5UfY3cjCkesHCsxk/wq0bbSJRUxtPr",
   server: false
 
+config :phoenix_test, :endpoint, TODOWeb.Endpoint
 # In test we don't send emails.
 config :todo, TODO.Mailer, adapter: Swoosh.Adapters.Test
 

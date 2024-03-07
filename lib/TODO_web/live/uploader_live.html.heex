@@ -1,15 +1,19 @@
-<form id="upload-form" phx-submit="save" phx-change="validate">
-  <.live_file_input upload={@uploads.avatar} />
-  <button type="submit">Upload</button>
+<div class="container" phx-drop-target={@uploads.avatar.ref}>
+<form id="upload-form" phx-submit="save" phx-change="validate" class="mx-auto max-w-2xl">
+  <Phoenix.Component.live_file_input upload={@uploads.avatar} class="text-black bg-blue-400 dark:bg-blue-500 sfont-medium rounded-lg text-sm px-5 py-2.5 text-center"/>
+  <button class="text-white bg-blue-400 dark:bg-blue-500 sfont-medium rounded-lg text-sm px-5 py-2.5 text-center" type="submit">Upload</button>
 </form>
 <br>
-<table class="shadow-lg bg-white border-collapse">
+<table class="shadow-lg bg-white border-collapse mx-auto max-w-2xl">
   <tr>
     <th class="bg-blue-100 border text-left px-8 py-4">Id</th>
+    <th class="bg-blue-100 border text-left px-8 py-4">Uploded by</th>
     <th class="bg-blue-100 border text-left px-8 py-4">Size</th>
     <th class="bg-blue-100 border text-left px-8 py-4">Filename</th>
     <th class="bg-blue-100 border text-left px-8 py-4">Content type</th>
     <th class="bg-blue-100 border text-left px-8 py-4">Download</th>
+    <th class="bg-blue-100 border text-left px-8 py-4">Action</th>
+
   </tr>
   <%= for file <- @uploaded_files do %>
   <tr
@@ -17,6 +21,18 @@
     tabindex="0"
   >
     <td class="border px-8 py-4"><%=Enum.find_index(@uploaded_files, fn f -> f.id == file.id end) + 1%></td>
+    <td class="border px-8 py-4">
+    <%= if is_nil file.user_id do %>
+    <%=file.user_id%>
+    <% else %>
+    <.link
+            href={~p"/users/#{file.user_id}"}
+            class="text-[0.8125rem] leading-6 text-zinc-900 font-bold hover:text-zinc-700"
+          >
+          <%=file.user.email%>
+      </.link>
+    <% end %>
+    </td>
     <td class="border px-8 py-4"><%=file.size%></td>
     <td class="border px-8 py-4"><%=file.filename%></td>
     <td class="border px-8 py-4"><%=file.content_type%></td>
@@ -39,6 +55,53 @@
         </a>
     <%end%>
     </td>
+    <td>
+      <.link
+        class="border px-8 py-4 bg-blue-400"
+        phx-click={JS.push("delete", value: %{id: file.id}) |> hide("##{file.id}")}
+        data-confirm="Are you sure?"
+      >
+          Delete
+      </.link>
+    </td>
   </tr>
   <%end%>
 </table>
+<br>
+<div class="grid grid-cols-3 grid-rows-3 gap-3">
+<%= for file <- @uploaded_files do %>
+<div class="overflow-y-auto max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <%= case file.content_type do %>
+    <% "image/jpeg" -> %>
+      <% base64_content = file.content |> Base.encode64 %>
+        <a href={"data:image/jpeg;base64,#{base64_content}"} download={file.filename} innerHTML="download">
+          <img class="rounded-t-lg" src={"data:image/jpeg;base64,#{base64_content}"}>
+        </a>
+    <% "image/svg+xml" -> %>
+      <% base64_content = file.content |> Base.encode64 %>
+        <a href={"data:image/svg+xml;base64,#{base64_content}"} download={file.filename} innerHTML="download">
+          <img class="rounded-t-lg" src={"data:image/svg+xml;base64,#{base64_content}"}>
+        </a>
+    <% _ -> %>
+      <% base64_content = file.content |> Base.encode64 %>
+        <a href={"data:file.content_type;base64,#{base64_content}"} download={file.filename} innerHTML="download">
+          <img class="rounded-t-lg" src={"data:file.content_type;base64,#{base64_content}"}>
+        </a>
+    <%end%>
+    <div class="p-5">
+        <a href="#">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+        </a>
+        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+        <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Read more
+             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+            </svg>
+        </a>
+    </div>
+</div>
+<br>
+<%end%>
+</div>
+</div>

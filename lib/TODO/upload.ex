@@ -1,4 +1,5 @@
 defmodule TODO.Documents.Upload do
+  alias TODO.Accounts.User
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,6 +8,7 @@ defmodule TODO.Documents.Upload do
     field :filename, :string
     field :content_type, :string
     field :content, :binary
+    belongs_to :user, User
 
     timestamps(type: :utc_datetime)
   end
@@ -14,7 +16,7 @@ defmodule TODO.Documents.Upload do
   @doc false
   def changeset(upload, attrs) do
     upload
-    |> cast(attrs, [:filename, :size, :content_type, :content])
+    |> cast(attrs, [:filename, :size, :content_type, :content, :user_id])
     |> validate_required([:filename, :size, :content_type])
     |> validate_number(:size, greater_than: 0)
   end

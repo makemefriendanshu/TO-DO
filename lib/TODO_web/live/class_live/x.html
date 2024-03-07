@@ -1,0 +1,64 @@
+<.header>
+    Listing Class
+    <:actions>
+        <.link phx-click={JS.push("load_styles", value: %{})}>
+            <.button>Load Styles</.button>
+        </.link>
+        <.link patch={~p"/class/new"}>
+            <.button>New Class</.button>
+        </.link>
+    </:actions>
+</.header>
+
+<.header>
+    <:actions :for={class <- @streams.class_collection.inserts |> Enum.map( fn {_,_,x,_} -> x |> Map.get(:text) |>
+        String.split("/") |> Enum.at(1) end) |> Enum.uniq }}
+        id={class}
+        >
+        <.link patch={~p"/"}>
+            <.button>New Class</.button>
+
+            <.button type="button" class="-m-3 flex-none p-3 opacity-20 hover:opacity-40" aria-label={gettext("close")}>
+                <%= class%>
+            </.button>
+        </.link>
+    </:actions>
+</.header>
+
+<.table id="class" rows={@streams.class_collection} row_click={fn {_id, class} -> JS.navigate(~p"/class/#{class}") end}
+    >
+    <:col :let={{_id, class}} label="Name">
+        <%= class.name %>
+    </:col>
+    <:col :let={{_id, class}} label="Text"> <a href={"https://tailwind.build/#{class.text}"}>
+            <%= class.text |> String.split("/") |> Enum.at(1) %>
+        </a></:col>
+    <:col :let={{_id, class}} label="Elem">
+        <%= class.elem %>
+    </:col>
+    <:col :let={{_id, class}} label="Example">
+        <%= class.example %>
+    </:col>
+    <:col :let={{_id, class}} label="body">
+        <%= class.body |> raw %>
+    </:col>
+
+    <:action :let={{_id, class}}>
+        <div class="sr-only">
+            <.link navigate={~p"/class/#{class}"}>Show</.link>
+        </div>
+        <.link patch={~p"/class/#{class}/edit"}>Edit</.link>
+    </:action>
+    <:action :let={{id, class}}>
+        <.link phx-click={JS.push("delete", value: %{id: class.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+            >
+            Delete
+        </.link>
+    </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="class-modal" show on_cancel={JS.patch(~p"/class")}>
+    <.live_component module={TODOWeb.ClassLive.FormComponent} id={@class.id || :new} title={@page_title}
+        action={@live_action} class={@class} patch={~p"/class"} />
+</.modal>
