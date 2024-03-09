@@ -3,7 +3,7 @@ defmodule TODO.Scraper do
   @initial_path "/category/towns-102-55.html"
 
   def run(path \\ @initial_path) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
     document = perform_request_and_parse_result(path)
 
     document
@@ -14,7 +14,7 @@ defmodule TODO.Scraper do
   end
 
   defp perform_request_and_parse_result("" <> path) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     {:ok, %Finch.Response{body: body}} =
       Finch.build(:get, "#{@base_url}/#{path}")
@@ -25,7 +25,7 @@ defmodule TODO.Scraper do
   end
 
   defp save_rows(rows) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     rows
     |> parse_places
@@ -33,7 +33,7 @@ defmodule TODO.Scraper do
   end
 
   defp parse_places(data) when is_list(data) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     data
     |> Enum.chunk_every(3)
@@ -54,14 +54,14 @@ defmodule TODO.Scraper do
   end
 
   defp parse_places(data) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     data
     |> IO.inspect(label: "string")
   end
 
   defp maybe_paginate(document) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     document
     |> Floki.find(".pagination li a")
