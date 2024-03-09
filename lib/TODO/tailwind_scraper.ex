@@ -10,9 +10,12 @@ defmodule TODO.TailwindScraper do
     dbg(__ENV__.function)
 
     File.read!("./classes.html")
+    # |> IO.inspect(label: "class")
     |> Floki.parse_document!()
     |> Floki.find("a")
     |> parse_page()
+
+    rename_links
   end
 
   def run(path \\ @initial_path) do
@@ -103,7 +106,7 @@ defmodule TODO.TailwindScraper do
     dbg(__ENV__.function)
 
     {:ok, %Finch.Response{body: body}} =
-      Finch.build(:get, "#{@base_url}/#{path}" |> IO.inspect(label: "url"))
+      Finch.build(:get, "#{@base_url}/#{path}")
       |> Finch.request(TODO.Finch)
 
     {:ok, document} = Floki.parse_document(body)
@@ -114,13 +117,15 @@ defmodule TODO.TailwindScraper do
     dbg(__ENV__.function)
 
     data
+    |> IO.inspect(labe: "data")
     |> Enum.chunk_every(3)
+    |> IO.inspect(labe: "data2")
     |> Enum.map(fn x ->
       x
       |> Enum.reduce([], fn {_, c, _}, acc ->
         if is_tuple(hd(c)),
           do: acc ++ [hd(c) |> Tuple.to_list() |> Enum.at(1)],
-          else: acc ++ (c |> IO.inspect(label: "c"))
+          else: acc ++ (c)
       end)
     end)
     |> List.flatten()
@@ -138,7 +143,6 @@ defmodule TODO.TailwindScraper do
     dbg(__ENV__.function)
 
     data
-    |> IO.inspect(label: "string")
   end
 
   def rename_links do
@@ -151,16 +155,16 @@ defmodule TODO.TailwindScraper do
 
     {office, ids1, message, ids2} =
       {classes
-       |> Enum.filter(&String.contains?(&1.label, message_url))
-       |> Enum.map(&String.replace(&1.label, message_url, message_local)),
-       classes
-       |> Enum.filter(&String.contains?(&1.label, message_url))
-       |> Enum.map(& &1.id),
-       classes
        |> Enum.filter(&String.contains?(&1.label, office_url))
        |> Enum.map(&String.replace(&1.label, office_url, office_local)),
        classes
        |> Enum.filter(&String.contains?(&1.label, office_url))
+       |> Enum.map(& &1.id),
+       classes
+       |> Enum.filter(&String.contains?(&1.label, message_url))
+       |> Enum.map(&String.replace(&1.label, message_url, message_local)),
+       classes
+       |> Enum.filter(&String.contains?(&1.label, message_url))
        |> Enum.map(& &1.id)}
 
     ids1
@@ -171,7 +175,9 @@ defmodule TODO.TailwindScraper do
     ids2
     |> Enum.map(&Repo.get!(Class, &1))
     |> Enum.with_index()
-    |> Enum.map(fn {k, v} -> Repo.update!(Class.changeset(k, %{body: message |> Enum.at(v)})) end)
+    |> Enum.map(fn {k, v} -> Repo.update!(Class.changeset(k, %{label: message |> Enum.at(v)})) end)
+    # |> IO.inspect(label: "ids")
+
 
     {office, ids1, message, ids2} =
       {classes
@@ -194,7 +200,7 @@ defmodule TODO.TailwindScraper do
     ids1
     |> Enum.map(&Repo.get!(Class, &1))
     |> Enum.with_index()
-    |> Enum.map(fn {k, v} -> Repo.update!(Class.changeset(k, %{label: office |> Enum.at(v)})) end)
+    |> Enum.map(fn {k, v} -> Repo.update!(Class.changeset(k, %{body: office |> Enum.at(v)})) end)
 
     ids2
     |> Enum.map(&Repo.get!(Class, &1))

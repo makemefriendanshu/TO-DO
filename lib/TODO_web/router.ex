@@ -74,7 +74,7 @@ defmodule TODOWeb.Router do
   scope "/", TODOWeb do
     pipe_through([:browser])
 
-    get("/", PageController, :home)
+    get("/tailwind", PageController, :home)
     # live_storybook("/storybook", backend_module: TODOWeb.Storybook)
     delete("/users/log_out", UserSessionController, :delete)
 
@@ -82,7 +82,7 @@ defmodule TODOWeb.Router do
       on_mount: [{TODOWeb.UserAuth, :mount_current_user}] do
       live("/users/confirm/:token", UserConfirmationLive, :edit)
       live("/users/confirm", UserConfirmationInstructionsLive, :new)
-      # live("/uploads", UploaderLive, :index)
+      live("/uploads", UploaderLive, :index)
 
       # live "/places", PlaceLive.Index, :index
       # live "/places/new", PlaceLive.Index, :new
@@ -90,7 +90,7 @@ defmodule TODOWeb.Router do
       # live "/places/:id", PlaceLive.Show, :show
       # live "/places/:id/show/edit", PlaceLive.Show, :edit
 
-      live "/class", ClassLive.Index, :index
+      live "/", ClassLive.Index, :index
       live "/class/new", ClassLive.Index, :new
       live "/class/:id/edit", ClassLive.Index, :edit
       live "/class/:id", ClassLive.Show, :show
