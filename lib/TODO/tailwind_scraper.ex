@@ -7,7 +7,7 @@ defmodule TODO.TailwindScraper do
   @initial_path ""
 
   def start() do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     File.read!("./classes.html")
     # |> IO.inspect(label: "class")
@@ -19,7 +19,7 @@ defmodule TODO.TailwindScraper do
   end
 
   def run(path \\ @initial_path) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     class =
       ".#{path |> String.split("/") |> Enum.at(2)}"
@@ -103,7 +103,7 @@ defmodule TODO.TailwindScraper do
   end
 
   def perform_request_and_parse_result("" <> path) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     {:ok, %Finch.Response{body: body}} =
       Finch.build(:get, "#{@base_url}/#{path}")
@@ -114,7 +114,7 @@ defmodule TODO.TailwindScraper do
   end
 
   defp parse_page(data) when is_list(data) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     data
     |> IO.inspect(labe: "data")
@@ -140,7 +140,7 @@ defmodule TODO.TailwindScraper do
   end
 
   defp parse_page(data) do
-    dbg(__ENV__.function)
+    # dbg(__ENV__.function)
 
     data
   end
