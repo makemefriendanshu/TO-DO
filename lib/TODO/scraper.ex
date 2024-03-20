@@ -10,7 +10,7 @@ defmodule TODO.Scraper do
     |> Floki.find("table tr td")
     |> save_rows()
 
-    maybe_paginate(document)
+    # maybe_paginate(document)
   end
 
   defp perform_request_and_parse_result("" <> path) do

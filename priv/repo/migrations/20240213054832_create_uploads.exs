@@ -1,4 +1,4 @@
-defmodule Todo.Repo.Migrations.CreateUploads do
+defmodule TODO.Repo.Migrations.CreateUploads do
   use Ecto.Migration
 
   def change do

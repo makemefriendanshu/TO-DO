@@ -2,6 +2,10 @@ defmodule TODO.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  require TODO.Agentize, as: Agentize
+
+  alias TODO.Accounts.Relationship
+
   schema "users" do
     field :name, :string
     field :email, :string
@@ -13,7 +17,21 @@ defmodule TODO.Accounts.User do
     # field :updated_at, :utc_datetime
 
     timestamps(type: :utc_datetime)
+    has_many(:active_relationships, Relationship,
+      foreign_key: :follower_id,
+      on_delete: :delete_all
+    )
+
+    has_many(:passive_relationships, Relationship,
+      foreign_key: :followed_id,
+      on_delete: :delete_all
+    )
+
+    has_many(:followings, through: [:active_relationships, :followed])
+    has_many(:followers, through: [:passive_relationships, :follower])
   end
+
+  Agentize.agentize(TODO.Accounts.User)
 
   @doc """
   A user changeset for registration.

@@ -1,0 +1,19 @@
+<.header>
+  Task Test Output
+</.header>
+
+<div class="my-4 text-center flex">
+  <.button :if={is_nil(@running_task)} phx-click="start">Start</.button>
+  <.button :if={@running_task} phx-click="cancel">Cancel</.button>
+</div>
+
+<ul id="messages" role="list" class="text-sm divide-y divide-gray-100">
+  <li :for={msg <- @messages} class="relative flex justify-between gap-x-6 py-5 hover:bg-zinc-50 sm:rounded">
+    <div class="font-semibold text-zinc-900">
+      <.tooltip class="px-4 py-2 font-medium text-white bg-black border border-white rounded-md">
+        <%=  DateTime.now!("Etc/UTC") |> Map.get(:second) %>
+      </.tooltip>
+      <%= msg %>
+    </div>
+  </li>
+</ul>

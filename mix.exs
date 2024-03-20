@@ -5,7 +5,7 @@ defmodule TODO.MixProject do
     [
       app: :todo,
       version: "0.1.0",
-      elixir: "~> 1.12.2",
+      elixir: "~> 1.17.0-dev",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -37,7 +37,7 @@ defmodule TODO.MixProject do
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 3.3"},
+      {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.5"},
       {:floki, ">= 0.30.0"},
@@ -51,7 +51,16 @@ defmodule TODO.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:phoenix_storybook, "~> 0.6.0"},
+      {:phoenix_test, "~> 0.2.7", only: :test},
+      {:faker, "~> 0.17", only: [:dev, :test]},
+      {:ortex, "0.1.9"},
+      {:evision, "~> 0.1.33"},
+      {:image, "~> 0.43.0"},
+      {:kino, "0.11.0"},
+      {:exla, "~> 0.6.1"},
+      {:tucan, "~> 0.3.0"}
     ]
   end
 

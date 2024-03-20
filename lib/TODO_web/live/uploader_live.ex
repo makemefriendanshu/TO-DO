@@ -2,6 +2,7 @@ defmodule TODOWeb.UploaderLive do
   use TODOWeb, :live_view
   alias TODO.Repo
   alias TODO.Documents.Upload
+  alias TODOWeb.CoreComponents
 
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
@@ -31,7 +32,7 @@ defmodule TODOWeb.UploaderLive do
       consume_uploaded_entries(socket, :avatar, fn %{path: path}, _entry ->
         content = File.read!(path)
 
-        {:ok, upload} =
+        {:ok, _upload} =
           %Upload{}
             |> Upload.changeset(%{
               filename: client_name,
@@ -45,9 +46,9 @@ defmodule TODOWeb.UploaderLive do
     {:noreply, update(socket, :uploaded_files, &(&1 ++ uploaded_files))}
   end
 
-  defp error_to_string(:too_large), do: "Too large"
-  defp error_to_string(:too_many_files), do: "You have selected too many files"
-  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
+  # defp error_to_string(:too_large), do: "Too large"
+  # defp error_to_string(:too_many_files), do: "You have selected too many files"
+  # defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 
   defp get_file_info(socket, atom) do
     socket.assigns.uploads

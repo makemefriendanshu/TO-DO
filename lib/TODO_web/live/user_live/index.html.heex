@@ -13,6 +13,28 @@
   row_click={fn {_id, user} -> JS.navigate(~p"/users/#{user}") end}
 >
   <:col :let={{_id, user}} label="Email"><%= user.email %></:col>
+  <:col :let={{_id, user}} label="Is Admin"><%= user.is_admin %></:col>
+
+  <:col :let={{_id, user}} label="Followers">
+    <ul>
+    <%= if user.followers != [] do %>
+      <%= for user <- user.followers do %>
+        <li><.link navigate={~p"/users/#{user.id}"}><%= user.email %></.link></li>
+      <% end %>
+    <% end %>
+    </ul>
+  </:col>
+
+  <:col :let={{_id, user}} label="Followings" class="container mx-auto">
+    <ul>
+    <%= if user.followings != [] do %>
+      <%= for email <- user.followings |> Enum.map(& &1 |> Map.get(:email)) do %>
+        <li><%= email %></li>
+      <% end %>
+    <% end %>
+    </ul>
+  </:col>
+
   <:action :let={{_id, user}}>
     <div class="sr-only">
       <.link navigate={~p"/users/#{user}"}>Show</.link>

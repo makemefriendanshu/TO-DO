@@ -1,6 +1,6 @@
 defmodule TODOWeb.Router do
   use TODOWeb, :router
-  # import PhoenixStorybook.Router
+  import PhoenixStorybook.Router
 
   import TODOWeb.UserAuth
 
@@ -32,9 +32,9 @@ defmodule TODOWeb.Router do
   # as long as you are also using SSL (which you should anyway).
   import Phoenix.LiveDashboard.Router
 
-  # scope "/" do
-  #   storybook_assets()
-  # end
+  scope "/" do
+    storybook_assets()
+  end
 
   scope "/dev" do
     pipe_through(:browser)
@@ -75,7 +75,7 @@ defmodule TODOWeb.Router do
     pipe_through([:browser])
 
     get("/tailwind", PageController, :home)
-    # live_storybook("/storybook", backend_module: TODOWeb.Storybook)
+    live_storybook("/storybook", backend_module: TODOWeb.Storybook)
     delete("/users/log_out", UserSessionController, :delete)
 
     live_session :current_user,
@@ -83,7 +83,10 @@ defmodule TODOWeb.Router do
       live("/users/confirm/:token", UserConfirmationLive, :edit)
       live("/users/confirm", UserConfirmationInstructionsLive, :new)
       live("/uploads", UploaderLive, :index)
+      resources "/api/relationship_types", RelationshipTypeController, except: [:new, :edit]
 
+      live "/task_test", TaskTestLive.Index, :index
+      live "/map", MapLive.Index, :index
       # live "/places", PlaceLive.Index, :index
       # live "/places/new", PlaceLive.Index, :new
       # live "/places/:id/edit", PlaceLive.Index, :edit

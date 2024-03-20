@@ -7,6 +7,236 @@ defmodule TODO.Accounts do
   alias TODO.Repo
 
   alias TODO.Accounts.User
+  alias TODO.Accounts.Relationship
+  alias TODO.Accounts.RelationshipType
+
+
+  # functions to manage followers/followings relationships
+  def followers(user) do
+    list = user |> Repo.preload(:followers)
+    list.followers
+  end
+
+  def followings(user) do
+    list = user |> Repo.preload(:followings)
+    list.followings
+  end
+
+  def active_relationships(user) do
+    list = user |> Repo.preload(:active_relationships)
+    list.active_relationships
+  end
+
+  def passive_relationships(user) do
+    list = user |> Repo.preload(:passive_relationships)
+    list.passive_relationships
+  end
+
+  def follow(current_user, other_user) do
+    %Relationship{}
+    |> Relationship.changeset(%{follower_id: current_user.id, followed_id: other_user.id})
+    |> Repo.insert()
+  end
+
+  def unfollow(current_user, other_user) do
+    Repo.get_by!(Relationship, follower_id: current_user.id, followed_id: other_user.id)
+    |> Repo.delete()
+  end
+
+  def following?(current_user, other_user) do
+    query =
+      from(r in Relationship, where: [follower_id: ^current_user.id, followed_id: ^other_user.id])
+
+    Repo.exists?(query)
+  end
+
+  @doc """
+  Returns the list of relationships.
+
+  ## Examples
+
+      iex> list_relationships()
+      [%Relationship{}, ...]
+
+  """
+  def list_relationships do
+    Repo.all(Relationship)
+  end
+
+  @doc """
+  Gets a single relationship.
+
+  Raises `Ecto.NoResultsError` if the Relationship does not exist.
+
+  ## Examples
+
+      iex> get_relationship!(123)
+      %Relationship{}
+
+      iex> get_relationship!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_relationship!(id), do: Repo.get!(Relationship, id)
+
+  @doc """
+  Creates a relationship.
+
+  ## Examples
+
+      iex> create_relationship(%{field: value})
+      {:ok, %Relationship{}}
+
+      iex> create_relationship(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_relationship(attrs \\ %{}) do
+    %Relationship{}
+    |> Relationship.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a relationship.
+
+  ## Examples
+
+      iex> update_relationship(relationship, %{field: new_value})
+      {:ok, %Relationship{}}
+
+      iex> update_relationship(relationship, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_relationship(%Relationship{} = relationship, attrs) do
+    relationship
+    |> Relationship.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a relationship.
+
+  ## Examples
+
+      iex> delete_relationship(relationship)
+      {:ok, %Relationship{}}
+
+      iex> delete_relationship(relationship)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_relationship(%Relationship{} = relationship) do
+    Repo.delete(relationship)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking relationship changes.
+
+  ## Examples
+
+      iex> change_relationship(relationship)
+      %Ecto.Changeset{data: %Relationship{}}
+
+  """
+  def change_relationship(%Relationship{} = relationship, attrs \\ %{}) do
+    Relationship.changeset(relationship, attrs)
+  end
+
+  @doc """
+  Returns the list of relationship_types.
+
+  ## Examples
+
+      iex> list_relationship_types()
+      [%RelationshipType{}, ...]
+
+  """
+  def list_relationship_types do
+    Repo.all(RelationshipType)
+  end
+
+  @doc """
+  Gets a single relationship_type.
+
+  Raises `Ecto.NoResultsError` if the Relationship type does not exist.
+
+  ## Examples
+
+      iex> get_relationship_type!(123)
+      %RelationshipType{}
+
+      iex> get_relationship_type!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_relationship_type!(id), do: Repo.get!(RelationshipType, id)
+
+  @doc """
+  Creates a relationship_type.
+
+  ## Examples
+
+      iex> create_relationship_type(%{field: value})
+      {:ok, %RelationshipType{}}
+
+      iex> create_relationship_type(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_relationship_type(attrs \\ %{}) do
+    %RelationshipType{}
+    |> RelationshipType.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a relationship_type.
+
+  ## Examples
+
+      iex> update_relationship_type(relationship_type, %{field: new_value})
+      {:ok, %RelationshipType{}}
+
+      iex> update_relationship_type(relationship_type, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_relationship_type(%RelationshipType{} = relationship_type, attrs) do
+    relationship_type
+    |> RelationshipType.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a relationship_type.
+
+  ## Examples
+
+      iex> delete_relationship_type(relationship_type)
+      {:ok, %RelationshipType{}}
+
+      iex> delete_relationship_type(relationship_type)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_relationship_type(%RelationshipType{} = relationship_type) do
+    Repo.delete(relationship_type)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking relationship_type changes.
+
+  ## Examples
+
+      iex> change_relationship_type(relationship_type)
+      %Ecto.Changeset{data: %RelationshipType{}}
+
+  """
+  def change_relationship_type(%RelationshipType{} = relationship_type, attrs \\ %{}) do
+    RelationshipType.changeset(relationship_type, attrs)
+  end
 
   @doc """
   Returns the list of users.
@@ -19,6 +249,12 @@ defmodule TODO.Accounts do
   """
   def list_users do
     Repo.all(User)
+  end
+
+  def list_users_with_preloads do
+    Repo.all(from u in User, preload: [:followers, :followings, :active_relationships, :passive_relationships])
+  rescue
+    e -> {:error, e}
   end
 
   @doc """

@@ -115,7 +115,7 @@ defmodule TODOWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
+        "fixed top-2 right-5 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
         @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
         @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
       ]}
@@ -721,6 +721,21 @@ defmodule TODOWeb.CoreComponents do
 
   defp join_refs(entries), do: Enum.join(entries, ",")
 
+  attr :class, :string, default: nil
+  slot :inner_block, required: true
+
+  def tooltip(assigns) do
+    ~H"""
+    <div id={random_id("tt")} class={["tooltip", @class]} role="tooltip" phx-hook="TooltipHook">
+      <%= render_slot(@inner_block) %>
+      <div class="arrow" data-popper-arrow></div>
+    </div>
+    """
+  end
+
+  def random_id(prefix) do
+    prefix <> "_" <> (:crypto.strong_rand_bytes(8) |> Base.url_encode64(padding: false))
+  end
 
   ## JS Commands
 

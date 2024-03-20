@@ -42,4 +42,33 @@ defmodule TODO.AccountsFixtures do
     [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
     token
   end
+
+  @doc """
+  Generate a relationship.
+  """
+  def relationship_fixture(attrs \\ %{}) do
+    {:ok, relationship} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> TODO.Accounts.create_relationship()
+
+    relationship
+  end
+
+  @doc """
+  Generate a relationship_type.
+  """
+  def relationship_type_fixture(attrs \\ %{}) do
+    {:ok, relationship_type} =
+      attrs
+      |> Enum.into(%{
+        name: "some name",
+        type: "some type"
+      })
+      |> TODO.Accounts.create_relationship_type()
+
+    relationship_type
+  end
 end

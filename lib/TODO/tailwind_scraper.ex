@@ -15,7 +15,7 @@ defmodule TODO.TailwindScraper do
     |> Floki.find("a")
     |> parse_page()
 
-    rename_links
+    rename_links()
   end
 
   def run(path \\ @initial_path) do
