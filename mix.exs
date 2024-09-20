@@ -55,7 +55,7 @@ defmodule TODO.MixProject do
       {:phoenix_storybook, "~> 0.6.0"},
       {:phoenix_test, "~> 0.2.7", only: :test},
       {:faker, "~> 0.17", only: [:dev, :test]},
-      {:ortex, "0.1.9"},
+      # {:ortex, "0.1.9"},
       {:evision, "~> 0.1.33"},
       {:image, "~> 0.43.0"},
       {:kino, "0.11.0"},
