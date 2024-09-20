@@ -1,0 +1,80 @@
+<.header>
+    Listing Class
+    <:actions>
+        <.link phx-click={JS.push("load_styles", value: %{})}>
+            <.button disabled={@streams.class_collection.inserts |> length != 0} class="bg-gray-600">Load Classes</.button>
+        </.link>
+        <.link patch={~p"/class/new"}>
+            <.button>New Class</.button>
+        </.link>
+    </:actions>
+</.header>
+<br>
+<div class="flex flex-wrap">
+    <div :for={class_name <- assigns[:sections]}
+        id={class_name}
+        class="bg-gray-200 flex flex-wrap mr-10 mb-10"
+        >
+        <.button type="button"
+        class="-m-3 p-3 opacity-20 hover:opacity-40 delay-200" aria-label={gettext("close")}
+        phx-click={JS.push("show_class_list", value: %{param: class_name})}>
+          <%= "#{class_name}"%>
+        </.button>
+    </div>
+</div>
+<br>
+<%= if @streams.class_collection.inserts |> length == 0 do %>
+<div class="flex justify-center">
+  <svg
+    class="animate-spin h-10 w-10 text-blue-500"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+    </circle>
+    <path
+      class="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 6.627 5.373 12 12 12v-4a7.946 7.946 0 01-6-2.709z"
+    >
+    </path>
+  </svg>    
+</div>
+<% end %>
+<br>
+<.table id="class" rows={@streams.class_collection}
+    >
+    <:col :let={{_id, class}} label="Name">
+        <%= class.name %>
+    </:col>
+    <:col :let={{_id, class}} label="Section"> <a href={"https://tailwind.build/#{class.text}"}>
+            <%= class.text |> String.split("/") |> Enum.at(1) %>
+        </a></:col>
+    <:col :let={{_id, class}} label="Example" class="flex-shrink text-center bg-pink-200 p-2 m-2">
+        <%= class.label %>
+    </:col>
+    <:col :let={{_id, class}} label="body">
+        <%= class.body |> raw %>
+    </:col>
+<!--
+    <:action :let={{_id, class}}>
+        <div class="sr-only">
+            <.link navigate={~p"/class/#{class}"}>Show</.link>
+        </div>
+        <.link patch={~p"/class/#{class}/edit"}>Edit</.link>
+    </:action>
+    <:action :let={{id, class}}>
+        <.link phx-click={JS.push("delete", value: %{id: class.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+    </:action>
+-->
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="class-modal" show on_cancel={JS.patch(~p"/class")}>
+    <.live_component module={TODOWeb.ClassLive.FormComponent} id={@class.id || :new} title={@page_title}
+        action={@live_action} class={@class} patch={~p"/class"} />
+</.modal>

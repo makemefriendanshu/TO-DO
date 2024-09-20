@@ -1,0 +1,28 @@
+<.header>
+  Class <%= @class.id %>
+  <:subtitle>This is a class record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/class/#{@class}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit class</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @class.name %></:item>
+  <:item title="Text"><%= @class.text %></:item>
+  <:item title="Example"><%= @class.example %></:item>
+</.list>
+
+<.back navigate={~p"/class"}>Back to class</.back>
+
+<.modal :if={@live_action == :edit} id="class-modal" show on_cancel={JS.patch(~p"/class/#{@class}")}>
+  <.live_component
+    module={TODOWeb.ClassLive.FormComponent}
+    id={@class.id}
+    title={@page_title}
+    action={@live_action}
+    class={@class}
+    patch={~p"/class/#{@class}"}
+  />
+</.modal>

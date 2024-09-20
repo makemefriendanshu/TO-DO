@@ -1,0 +1,44 @@
+<form id="upload-form" phx-submit="save" phx-change="validate">
+  <CoreComponents.live_file_input upload={@uploads.avatar} />
+  <button type="submit">Upload</button>
+</form>
+<br>
+<table class="shadow-lg bg-white border-collapse">
+  <tr>
+    <th class="bg-blue-100 border text-left px-8 py-4">Id</th>
+    <th class="bg-blue-100 border text-left px-8 py-4">Size</th>
+    <th class="bg-blue-100 border text-left px-8 py-4">Filename</th>
+    <th class="bg-blue-100 border text-left px-8 py-4">Content type</th>
+    <th class="bg-blue-100 border text-left px-8 py-4">Download</th>
+  </tr>
+  <%= for file <- @uploaded_files do %>
+  <tr
+    class="hover:bg-gray-50 focus:bg-gray-300 active:bg-red-200"
+    tabindex="0"
+  >
+    <td class="border px-8 py-4"><%=Enum.find_index(@uploaded_files, fn f -> f.id == file.id end) + 1%></td>
+    <td class="border px-8 py-4"><%=file.size%></td>
+    <td class="border px-8 py-4"><%=file.filename%></td>
+    <td class="border px-8 py-4"><%=file.content_type%></td>
+    <td class="border px-8 py-4">
+    <%= case file.content_type do %>
+    <% "image/jpeg" -> %>
+      <% base64_content = file.content |> Base.encode64 %>
+        <a href={"data:image/jpeg;base64,#{base64_content}"} download={file.filename} innerHTML="download">
+          <img src={"data:image/jpeg;base64,#{base64_content}"}>
+        </a>
+    <% "image/svg+xml" -> %>
+      <% base64_content = file.content |> Base.encode64 %>
+        <a href={"data:image/svg+xml;base64,#{base64_content}"} download={file.filename} innerHTML="download">
+          <img src={"data:image/svg+xml;base64,#{base64_content}"}>
+        </a>
+    <% _ -> %>
+      <% base64_content = file.content |> Base.encode64 %>
+        <a href={"data:file.content_type;base64,#{base64_content}"} download={file.filename} innerHTML="download">
+          <img src={"data:file.content_type;base64,#{base64_content}"}>
+        </a>
+    <%end%>
+    </td>
+  </tr>
+  <%end%>
+</table>
